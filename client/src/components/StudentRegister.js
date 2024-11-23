@@ -20,7 +20,7 @@ const StudentRegister = () => {
     setLoading(true); // Start loading state
 
     try {
-      await axios.post('http://localhost:5000/api/auth/register/student', {
+      await axios.post('https://notification-sytem.onrender.com/api/auth/register/student', {
         rollNo,
         email,
         password,

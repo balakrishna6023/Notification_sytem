@@ -18,7 +18,7 @@ const AdminRegister = () => {
     setError('');
 
     try {
-      await axios.post('http://localhost:5000/api/auth/register/admin', {
+      await axios.post('https://notification-sytem.onrender.com/api/auth/register/admin', {
         username,
         email,
         password,

@@ -24,7 +24,7 @@ const AdminDashboard = () => {
         }
 
         // Fetch admin details
-        const response = await axios.get('http://localhost:5000/api/admin/details', {
+        const response = await axios.get('https://notification-sytem.onrender.com/api/admin/details', {
           headers: { Authorization: `Bearer ${token}` },
         });
 
