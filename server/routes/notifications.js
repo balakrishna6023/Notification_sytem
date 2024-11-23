@@ -67,6 +67,7 @@ const scheduleNotificationReminders = async (notification) => {
   }
 };
 
+
 // Function to send notification reminders to students
 const sendNotificationReminder = async (notification) => {
   try {
