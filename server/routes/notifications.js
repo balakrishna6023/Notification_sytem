@@ -36,24 +36,35 @@ const sendEmailsToStudents = async (students, title, message, deadline) => {
 };
 
 // Function to schedule reminder notifications
-const scheduleNotificationReminders = (notification) => {
+const scheduleNotificationReminders = async (notification) => {
   const intervals = [15, 10, 5, 3, 1]; // Days before the deadline
 
-  intervals.forEach((daysBefore) => {
+  for (const daysBefore of intervals) {
     const notificationDate = new Date(notification.deadline);
     notificationDate.setDate(notificationDate.getDate() - daysBefore);
 
     // Ensure the scheduled time is in the future
     if (notificationDate > new Date()) {
-      schedule.scheduleJob(notificationDate, () => {
-        sendNotificationReminder(notification);
-      });
+      const jobData = { notificationId: notification._id, daysBefore };
 
-      console.log(
-        `Reminder scheduled for ${daysBefore} day(s) before the deadline: ${notificationDate}`
-      );
+      try {
+        // Store job in MongoDB
+        await Notification.updateOne(
+          { _id: notification._id },
+          { $push: { scheduledJobs: { jobData, runAt: notificationDate } } }
+        );
+
+        // Schedule job
+        schedule.scheduleJob(notificationDate, () => {
+          sendNotificationReminder(notification);
+        });
+
+        console.log(`Reminder scheduled for ${daysBefore} days before.`);
+      } catch (error) {
+        console.error("Error scheduling notification reminder:", error);
+      }
     }
-  });
+  }
 };
 
 // Function to send notification reminders to students
